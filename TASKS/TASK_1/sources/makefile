@@ -1,12 +1,9 @@
 CPP = g++
+BIN_DIR = ./bin
+SOURCES = main.cpp vector3d.cpp
 
-.SUFFIXES: .cpp .o
-	.cpp.o:
-	$(CPP) $<
-
-SOURCES = main.cpp vector.cpp
-
-main: $(SOURCES)
+release: $(SOURCES)
+	$(CPP) $? -o $(BIN_DIR)/release
 
 debug: $(SOURCES)
-	$(CPP) -DDEBUG $? -o debug
+	$(CPP) -DDEBUG $? -o $(BIN_DIR)/debug
