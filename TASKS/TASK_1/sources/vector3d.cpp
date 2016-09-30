@@ -1,63 +1,93 @@
 #include "vector3d.h"
+#include <iostream>
+using namespace vector;
+
+#define POINTS_COUNT 2
 
 struct Vector3D::Cheshire {
 	// Private fields and methods
-	double components[6];
+	Point3D points[POINTS_COUNT];
 };
 
-Vector3D::Vector3D() {
+Vector3D::Vector3D(Point3D a, Point3D b) {
 	smile = new Cheshire;
-	smile->components[0] = 0;
-	smile->components[1] = 0;
-	smile->components[2] = 0;
-	smile->components[3] = 0;
-	smile->components[4] = 0;
-	smile->components[5] = 0;
+	smile->points[PointId::A] = a;
+	smile->points[PointId::B] = b;
 }
 
 Vector3D::~Vector3D() {
 	delete smile;
 }
 
-double Vector3D::getElement(int i) {
-	return smile->components[i];
+Point3D Vector3D::getPoint(PointId p) {
+	return smile->points[p];
 }
 
-void Vector3D::setElement(int i, double value) {
-	smile->components[i] = value;
+void Vector3D::setPoint(PointId p, Point3D newPoint) {
+	smile->points[p] = newPoint;
 }
 
 double Vector3D::getModule() { 
 	return 0.0;
 }
 
-Vector3D* Vector3D::copy() {
-	return new Vector3D();
+Vector3D Vector3D::getReversed() {
+	Point3D resultPoint = {
+		smile->points[PointId::A].x - (smile->points[PointId::B].x - smile->points[PointId::A].x),
+		smile->points[PointId::A].y - (smile->points[PointId::B].y - smile->points[PointId::A].y),
+		smile->points[PointId::A].z - (smile->points[PointId::B].z - smile->points[PointId::A].z)
+	};
+
+	return *(new Vector3D(smile->points[PointId::A], resultPoint));
 }
 
-void Vector3D::multiplyByScalar(double scalar) {
-	smile->components[0] *= scalar;
-	smile->components[1] *= scalar;
-	smile->components[2] *= scalar;
-	smile->components[3] *= scalar;
-	smile->components[4] *= scalar;
-	smile->components[5] *= scalar;
+Vector3D Vector3D::copy() {
+	return *(new Vector3D(smile->points[PointId::A], smile->points[PointId::B]));
+}
+
+void Vector3D::multiplyByScalar(const double scalar) {
+	for(int i = 0; i < POINTS_COUNT; i++) {
+		smile->points[i].x *= scalar;
+		smile->points[i].y *= scalar;
+		smile->points[i].z *= scalar;
+	}
 }
 
 void Vector3D::normalize() {}
 
-void Vector3D::print() {}
+void Vector3D::print() {
+	std::cout 
+		<< "Vector: A("
+		<< smile->points[PointId::A].x << ", "
+		<< smile->points[PointId::A].y << ", "
+		<< smile->points[PointId::A].z << "), B("
+		<< smile->points[PointId::B].x << ", "
+		<< smile->points[PointId::B].y << ", "
+		<< smile->points[PointId::B].z << ")" << std::endl;
 
-Vector3D* Vector3D::add(Vector3D&, Vector3D&) {
-	return new Vector3D();
 }
 
-Vector3D* Vector3D::substruct(Vector3D&, Vector3D&) {
-	return new Vector3D();
+Vector3D Vector3D::add(Vector3D& vectorA, Vector3D& vectorB) {
+	Point3D pointAb = vectorA.getPoint(PointId::B);
+	Point3D pointBb = vectorB.getPoint(PointId::B);
+	Point3D pointBa = vectorB.getPoint(PointId::A);
+
+	Point3D resultPoint = {
+		pointBb.x + (pointAb.x - pointBa.x),
+		pointBb.y + (pointAb.y - pointBa.y),
+		pointBb.z + (pointAb.z - pointBa.z)
+	};
+
+	return *(new Vector3D(vectorA.getPoint(PointId::A), resultPoint));
 }
 
-Vector3D* Vector3D::vectorMultiply(Vector3D&, Vector3D&) {
-	return new Vector3D();
+Vector3D Vector3D::substract(Vector3D& vectorA, Vector3D& vectorB) {
+	Vector3D reversedB = vectorB.getReversed();
+	return Vector3D::add(vectorA, reversedB);
+}
+
+Vector3D Vector3D::vectorMultiply(Vector3D&, Vector3D&) {
+	return *(new Vector3D());
 }
 
 double Vector3D::scalarMultiply(Vector3D&, Vector3D&) {
