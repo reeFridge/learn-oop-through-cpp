@@ -3,28 +3,39 @@
 
 #include <math.h>
 
-class Vector3D {
-	struct Cheshire;
-	Cheshire* smile;
+namespace vector {
+	struct Point3D {
+		double x, y, z;
+	};
+
+	const Point3D NULL_POINT = { 0.0, 0.0, 0.0 };
 	
-	public:
-		Vector3D();
-		~Vector3D();
-		double		getElement(int);
-		void		setElement(int, double);
-		double		getModule();
-		Vector3D*	copy();
-		void		multiplyByScalar(double);
-		void		normalize();
-		void		print();
+	enum PointId { A, B };
 
-		static		Vector3D*	add(Vector3D&, Vector3D&);
-		static		Vector3D*	substruct(Vector3D&, Vector3D&);
-		static		Vector3D*	vectorMultiply(Vector3D&, Vector3D&);
-		static		double		scalarMultiply(Vector3D&, Vector3D&);
-		static		double		sin(Vector3D&, Vector3D&);
-		static		double		cos(Vector3D&, Vector3D&);
-		static		double		angle(Vector3D&, Vector3D&);
-};
+	class Vector3D {
+		struct Cheshire;
+		Cheshire* smile;
+	
+		public:
+			Vector3D(Point3D a = NULL_POINT, Point3D b = NULL_POINT);
+			~Vector3D();
+			Point3D		getPoint(PointId);
+			void		setPoint(PointId, Point3D);
+			double		getModule();
+			Vector3D	copy();
+			Vector3D	getReversed();
+			void		multiplyByScalar(const double);
+			void		normalize();
+			void		print();
 
-#endif // VECTOR_H
+			static		Vector3D	add(Vector3D&, Vector3D&);
+			static		Vector3D	substract(Vector3D&, Vector3D&);
+			static		Vector3D	vectorMultiply(Vector3D&, Vector3D&);
+			static		double		scalarMultiply(Vector3D&, Vector3D&);
+			static		double		sin(Vector3D&, Vector3D&);
+			static		double		cos(Vector3D&, Vector3D&);
+			static		double		angle(Vector3D&, Vector3D&);
+	};
+}
+
+#endif // VECTOR_3D_H
