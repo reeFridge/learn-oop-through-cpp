@@ -10,13 +10,13 @@ int main(int argc, char** argv) {
 	#endif // DEBUG
 	
 	Point3D point_a;
-	point_a.x = 0;
-	point_a.y = 0;
+	point_a.x = 10;
+	point_a.y = 10;
 	point_a.z = 0;
 
 	Point3D point_b;
-	point_b.x = 3;
-	point_b.y = 10.5;
+	point_b.x = 15;
+	point_b.y = 20;
 	point_b.z = 0;
 
 	cout << "VectorA:" << endl;
@@ -25,6 +25,11 @@ int main(int argc, char** argv) {
 
 	cout << endl << "VectorB:" << endl;
 	Vector3D vector_3 = vector_2.copy();
+	vector_3.print();
+
+	cout << "Module of VectorB: " << vector_3.getModule() << endl; 
+	vector_3.normalize();
+	cout << "Module of VectorB after normalizing: " << vector_3.getModule() << endl;
 	vector_3.print();
 	
 	cout << endl << "Reversed VectorB:" << endl;
