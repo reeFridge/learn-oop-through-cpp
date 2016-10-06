@@ -28,7 +28,11 @@ void Vector3D::setPoint(PointId p, Point3D newPoint) {
 }
 
 double Vector3D::getModule() { 
-	return 0.0;
+	double x = smile->points[PointId::B].x - smile->points[PointId::A].x;
+	double y = smile->points[PointId::B].y - smile->points[PointId::A].y;
+	double z = smile->points[PointId::B].z - smile->points[PointId::A].z;
+	x *= x;	y *= y;	z *= z;
+	return sqrt(x + y + z);
 }
 
 Vector3D Vector3D::getReversed() {
@@ -53,7 +57,15 @@ void Vector3D::multiplyByScalar(const double scalar) {
 	}
 }
 
-void Vector3D::normalize() {}
+void Vector3D::normalize() {
+	double module = this->getModule();
+	smile->points[PointId::B].x = smile->points[PointId::B].x/module;
+	smile->points[PointId::B].y = smile->points[PointId::B].y/module;
+	smile->points[PointId::B].z = smile->points[PointId::B].z/module;
+	smile->points[PointId::A].x = smile->points[PointId::A].x/module;
+	smile->points[PointId::A].y = smile->points[PointId::A].y/module;
+	smile->points[PointId::A].z = smile->points[PointId::A].z/module;
+}
 
 void Vector3D::print() {
 	std::cout 
