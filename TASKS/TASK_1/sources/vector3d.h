@@ -3,7 +3,7 @@
 
 #include <math.h>
 
-namespace vector {
+namespace classes {
 	struct Point3D {
 		double x, y, z;
 	};
