@@ -1,120 +1,146 @@
 #include "vector3d.h"
 #include <iostream>
-using namespace vector;
+using namespace classes;
+using std::cout;
+using std::endl;
 
-#define POINTS_COUNT 2
+inline void debugMsg(const char* msg) {
+#ifdef DEBUG
+	cout << msg << endl;
+#endif
+}
 
 struct Vector3D::Cheshire {
 	// Private fields and methods
-	Point3D points[POINTS_COUNT];
+	Point3D point;
+	unsigned int id;
 };
 
-Vector3D::Vector3D(Point3D a, Point3D b) {
+const Point3D Vector3D::nullPoint = { 0.0, 0.0, 0.0 };
+unsigned int Vector3D::idCounter = 0;
+
+//Constructors
+
+//1
+Vector3D::Vector3D(Point3D point) {
+	debugMsg("Constructor1 was called.");
 	smile = new Cheshire;
-	smile->points[PointId::A] = a;
-	smile->points[PointId::B] = b;
+	smile->point = point;
+	smile->id = idCounter++;
+	cout << "Vector:" << smile->id << " was created." << endl;
 }
 
+//2
+Vector3D::Vector3D(double x, double y, double z) {
+	debugMsg("Constructor2 was called.");
+	smile = new Cheshire;
+	smile->point = { x, y, z };
+	smile->id = idCounter++;
+	cout << "Vector:" << smile->id << " was created." << endl;
+}
+
+//Destructor
 Vector3D::~Vector3D() {
+	debugMsg("Destructor was called.");	
+	cout << "Vector:" << smile->id << " now deleting." << endl;
 	delete smile;
 }
 
-Point3D Vector3D::getPoint(PointId p) {
-	return smile->points[p];
+inline double Vector3D::getModule() const { 
+	return sqrt(
+			smile->point.x*smile->point.x +
+			smile->point.y*smile->point.y + 
+			smile->point.z*smile->point.z
+			);
 }
 
-void Vector3D::setPoint(PointId p, Point3D newPoint) {
-	smile->points[p] = newPoint;
+inline void Vector3D::print() const {
+	cout << "Vector: "
+		 << smile->point.x << ", "
+		 << smile->point.y << ", "
+		 << smile->point.z << endl;
+
 }
 
-double Vector3D::getModule() { 
-	double x = smile->points[PointId::B].x - smile->points[PointId::A].x;
-	double y = smile->points[PointId::B].y - smile->points[PointId::A].y;
-	double z = smile->points[PointId::B].z - smile->points[PointId::A].z;
-	x *= x;	y *= y;	z *= z;
-	return sqrt(x + y + z);
+inline const Point3D& Vector3D::getPoint() const {
+	return smile->point;
 }
 
-Vector3D Vector3D::getReversed() {
-	Point3D resultPoint = {
-		smile->points[PointId::A].x - (smile->points[PointId::B].x - smile->points[PointId::A].x),
-		smile->points[PointId::A].y - (smile->points[PointId::B].y - smile->points[PointId::A].y),
-		smile->points[PointId::A].z - (smile->points[PointId::B].z - smile->points[PointId::A].z)
-	};
-
-	return *(new Vector3D(smile->points[PointId::A], resultPoint));
-}
-
-Vector3D Vector3D::copy() {
-	return *(new Vector3D(smile->points[PointId::A], smile->points[PointId::B]));
+Vector3D Vector3D::copy() const {
+	return Vector3D(smile->point);
 }
 
 void Vector3D::multiplyByScalar(const double scalar) {
-	for(int i = 0; i < POINTS_COUNT; i++) {
-		smile->points[i].x *= scalar;
-		smile->points[i].y *= scalar;
-		smile->points[i].z *= scalar;
-	}
+	smile->point.x *= scalar;
+	smile->point.y *= scalar;
+	smile->point.z *= scalar;
 }
 
 void Vector3D::normalize() {
-	double module = this->getModule();
-	smile->points[PointId::B].x = smile->points[PointId::B].x/module;
-	smile->points[PointId::B].y = smile->points[PointId::B].y/module;
-	smile->points[PointId::B].z = smile->points[PointId::B].z/module;
-	smile->points[PointId::A].x = smile->points[PointId::A].x/module;
-	smile->points[PointId::A].y = smile->points[PointId::A].y/module;
-	smile->points[PointId::A].z = smile->points[PointId::A].z/module;
-}
-
-void Vector3D::print() {
-	std::cout 
-		<< "Vector: A("
-		<< smile->points[PointId::A].x << ", "
-		<< smile->points[PointId::A].y << ", "
-		<< smile->points[PointId::A].z << "), B("
-		<< smile->points[PointId::B].x << ", "
-		<< smile->points[PointId::B].y << ", "
-		<< smile->points[PointId::B].z << ")" << std::endl;
-
+	double module = getModule();
+	if (module == 0.0) {
+		throw "[ERROR] Normalize: dividing on null";
+	} else {
+		smile->point.x = smile->point.x/module;
+		smile->point.y = smile->point.y/module;
+		smile->point.z = smile->point.z/module;
+	}
 }
 
 Vector3D Vector3D::add(Vector3D& vectorA, Vector3D& vectorB) {
-	Point3D pointAb = vectorA.getPoint(PointId::B);
-	Point3D pointBb = vectorB.getPoint(PointId::B);
-	Point3D pointBa = vectorB.getPoint(PointId::A);
-
+	const Point3D& pointA = vectorA.getPoint();
+	const Point3D& pointB = vectorB.getPoint();
 	Point3D resultPoint = {
-		pointBb.x + (pointAb.x - pointBa.x),
-		pointBb.y + (pointAb.y - pointBa.y),
-		pointBb.z + (pointAb.z - pointBa.z)
+		pointA.x + pointB.x,
+		pointA.y + pointB.y,
+		pointA.z + pointB.z
 	};
 
-	return *(new Vector3D(vectorA.getPoint(PointId::A), resultPoint));
+	return Vector3D(resultPoint);
 }
 
 Vector3D Vector3D::substract(Vector3D& vectorA, Vector3D& vectorB) {
-	Vector3D reversedB = vectorB.getReversed();
+	const Point3D& pointB = vectorB.getPoint();
+	Vector3D reversedB(-pointB.x, -pointB.y, -pointB.z);
 	return Vector3D::add(vectorA, reversedB);
 }
 
-Vector3D Vector3D::vectorMultiply(Vector3D&, Vector3D&) {
-	return *(new Vector3D());
+Vector3D Vector3D::vectorMultiply(Vector3D& vectorA, Vector3D& vectorB) {
+	const Point3D& pointA = vectorA.getPoint();
+	const Point3D& pointB = vectorB.getPoint();
+	Point3D resultPoint = {
+		pointA.y * pointB.z - pointA.z * pointB.y,
+		pointA.z * pointB.x - pointA.x * pointB.z,
+		pointA.x * pointB.y - pointA.y * pointA.x
+	};
+
+	return Vector3D(resultPoint);
 }
 
-double Vector3D::scalarMultiply(Vector3D&, Vector3D&) {
-	return 0.0;
+double Vector3D::scalarMultiply(Vector3D& vectorA, Vector3D& vectorB) {
+	const Point3D& pointA = vectorA.getPoint();
+	const Point3D& pointB = vectorB.getPoint();
+	
+	return 
+		pointA.x * pointB.x +
+		pointA.y * pointB.y +
+		pointA.z * pointB.z;
 }
 
 double Vector3D::sin(Vector3D&, Vector3D&) {
 	return 0.0;
 }
 
-double Vector3D::cos(Vector3D&, Vector3D&) {
-	return 0.0;
+double Vector3D::cos(Vector3D& vectorA, Vector3D& vectorB) {
+	return 
+		Vector3D::scalarMultiply(vectorA, vectorB) /
+		(vectorA.getModule() * vectorB.getModule());
 }
 
-double Vector3D::angle(Vector3D&, Vector3D&) {
-	return 0.0;
+double Vector3D::angle(Vector3D& vectorA, Vector3D& vectorB) {
+	return atan2(
+		Vector3D::vectorMultiply(vectorA, vectorB).getModule(),
+		Vector3D::scalarMultiply(vectorA, vectorB)
+	);
 }
 
