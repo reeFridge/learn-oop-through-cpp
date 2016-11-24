@@ -21,9 +21,9 @@ namespace classes {
 			Vector3D(Point3D point = nullPoint);
 			Vector3D(double x, double y = 0.0, double z = 0.0);
 			~Vector3D();
-	inline	double			getModule() const;
-	inline	void			print()		const;
-	inline 	const Point3D&	getPoint()	const;
+			double			getModule() const;
+			void			print()		const;
+			const Point3D&	getPoint()	const;
 			Vector3D		copy()		const;
 			void			multiplyByScalar(const double);
 			void			normalize();
