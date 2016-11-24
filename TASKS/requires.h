@@ -7,6 +7,6 @@
 #include <string>
 
 // MY_LIBS
-#include "vector3d.h"
+#include "./TASK_1/sources/vector3d.h"
 
 #endif // REQUIRE_H
