@@ -126,8 +126,10 @@ namespace classes {
 			pointA.z * pointB.z;
 	}
 
-	double Vector3D::sin(Vector3D&, Vector3D&) {
-		return 0.0;
+	double Vector3D::sin(Vector3D& vectorA, Vector3D& vectorB) {
+		return
+			Vector3D::vectorMultiply(vectorA, vectorB).getModule() /
+			(vectorA.getModule() * vectorB.getModule());
 	}
 
 	double Vector3D::cos(Vector3D& vectorA, Vector3D& vectorB) {
