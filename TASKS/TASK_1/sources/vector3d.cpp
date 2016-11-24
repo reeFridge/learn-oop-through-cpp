@@ -139,10 +139,11 @@ namespace classes {
 	}
 
 	double Vector3D::angle(Vector3D& vectorA, Vector3D& vectorB) {
-		return atan2(
+		double radians = atan2(
 			Vector3D::vectorMultiply(vectorA, vectorB).getModule(),
 			Vector3D::scalarMultiply(vectorA, vectorB)
 		);
+		return radians * 180 / M_PI; //atan2 => [-pi, pi]
 	}
 }
 
