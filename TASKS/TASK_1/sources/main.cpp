@@ -1,5 +1,6 @@
-#include "require.h"
-using namespace classes;
+#include "./../../requires.h"
+using namespace std;
+using classes::Vector3D;
 
 int main(int argc, char** argv) {
 	#ifdef DEBUG
