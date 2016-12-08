@@ -86,7 +86,7 @@ namespace classes {
 		}
 	}
 
-	Vector3D Vector3D::add(Vector3D& vectorA, Vector3D& vectorB) {
+	Vector3D VectorsManip::add(Vector3D& vectorA, Vector3D& vectorB) {
 		const Point3D& pointA = vectorA.getPoint();
 		const Point3D& pointB = vectorB.getPoint();
 		Point3D resultPoint = {
@@ -98,13 +98,13 @@ namespace classes {
 		return Vector3D(resultPoint);
 	}
 
-	Vector3D Vector3D::substract(Vector3D& vectorA, Vector3D& vectorB) {
+	Vector3D VectorsManip::substract(Vector3D& vectorA, Vector3D& vectorB) {
 		const Point3D& pointB = vectorB.getPoint();
 		Vector3D reversedB(-pointB.x, -pointB.y, -pointB.z);
-		return Vector3D::add(vectorA, reversedB);
+		return VectorsManip::add(vectorA, reversedB);
 	}
 
-	Vector3D Vector3D::vectorMultiply(Vector3D& vectorA, Vector3D& vectorB) {
+	Vector3D VectorsManip::vectorMultiply(Vector3D& vectorA, Vector3D& vectorB) {
 		const Point3D& pointA = vectorA.getPoint();
 		const Point3D& pointB = vectorB.getPoint();
 		Point3D resultPoint = {
@@ -116,7 +116,7 @@ namespace classes {
 		return Vector3D(resultPoint);
 	}
 
-	double Vector3D::scalarMultiply(Vector3D& vectorA, Vector3D& vectorB) {
+	double VectorsManip::scalarMultiply(Vector3D& vectorA, Vector3D& vectorB) {
 		const Point3D& pointA = vectorA.getPoint();
 		const Point3D& pointB = vectorB.getPoint();
 
@@ -126,22 +126,22 @@ namespace classes {
 			pointA.z * pointB.z;
 	}
 
-	double Vector3D::sin(Vector3D& vectorA, Vector3D& vectorB) {
+	double VectorsManip::sin(Vector3D& vectorA, Vector3D& vectorB) {
 		return
-			Vector3D::vectorMultiply(vectorA, vectorB).getModule() /
+			VectorsManip::vectorMultiply(vectorA, vectorB).getModule() /
 			(vectorA.getModule() * vectorB.getModule());
 	}
 
-	double Vector3D::cos(Vector3D& vectorA, Vector3D& vectorB) {
+	double VectorsManip::cos(Vector3D& vectorA, Vector3D& vectorB) {
 		return 
-			Vector3D::scalarMultiply(vectorA, vectorB) /
+			VectorsManip::scalarMultiply(vectorA, vectorB) /
 			(vectorA.getModule() * vectorB.getModule());
 	}
 
-	double Vector3D::angle(Vector3D& vectorA, Vector3D& vectorB) {
+	double VectorsManip::angle(Vector3D& vectorA, Vector3D& vectorB) {
 		double radians = atan2(
-			Vector3D::vectorMultiply(vectorA, vectorB).getModule(),
-			Vector3D::scalarMultiply(vectorA, vectorB)
+			VectorsManip::vectorMultiply(vectorA, vectorB).getModule(),
+			VectorsManip::scalarMultiply(vectorA, vectorB)
 		);
 		return radians * 180 / M_PI; //atan2 => [-pi, pi]
 	}
