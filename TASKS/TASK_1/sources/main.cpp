@@ -1,10 +1,9 @@
 #include "require.h"
-using namespace std;
-using classes::Vector3D;
+using namespace classes;
 
 int main(int argc, char** argv) {
 	#ifdef DEBUG
-		cout << "[DEBUG IS ON]" << endl;
+		std::cout << "[DEBUG IS ON]" << std::endl;
 	#endif // DEBUG
 	
 	Vector3D v(1.0);
@@ -13,4 +12,6 @@ int main(int argc, char** argv) {
     v.print();
 	v1.print();
 	v2.print();
+	Vector3D multi(VectorsManip::add(v, v1));
+	multi.print();
 }
