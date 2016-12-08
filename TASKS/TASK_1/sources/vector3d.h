@@ -28,15 +28,17 @@ namespace classes {
 			void			multiplyByScalar(const double);
 			void			normalize();
 
-
-	static 	Vector3D	add(Vector3D&, Vector3D&);
-	static	Vector3D	substract(Vector3D&, Vector3D&);
-	static	Vector3D	vectorMultiply(Vector3D&, Vector3D&) ;
-	static	double		scalarMultiply(Vector3D&, Vector3D&);
-	static	double		sin(Vector3D&, Vector3D&);
-	static	double		cos(Vector3D&, Vector3D&);
-	static	double		angle(Vector3D&, Vector3D&);
 	};
+	
+	namespace VectorsManip {
+		Vector3D	add(Vector3D&, Vector3D&);
+		Vector3D	substract(Vector3D&, Vector3D&);
+		Vector3D	vectorMultiply(Vector3D&, Vector3D&) ;
+		double		scalarMultiply(Vector3D&, Vector3D&);
+		double		sin(Vector3D&, Vector3D&);
+		double		cos(Vector3D&, Vector3D&);
+		double		angle(Vector3D&, Vector3D&);
+	}
 }
 
 #endif // VECTOR_3D_H
