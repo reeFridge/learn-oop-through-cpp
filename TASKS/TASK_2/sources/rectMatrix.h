@@ -2,21 +2,29 @@
 #define RECT_MATRIX_H
 
 namespace classes {
+	
+	enum ERROR_CODE {
+		OUT_OF_ROWS,
+		OUT_OF_COLUMNS,
+		NOT_VALID_ADD,
+		NOT_VALID_MUL
+	};
 
 	struct m_size {
 		unsigned int columns, rows;
 		
-		m_size(unsigned int order = 1) : columns(order), rows(order) {};
-		m_size(unsigned int cols, unsigned int rows)
-		: columns(cols), rows(rows) {};
+		m_size(unsigned int order = 1) : rows(order), columns(order) {};
+		m_size(unsigned int rows, unsigned int cols)
+		: rows(rows), columns(cols) {};
 	};
 	
 	struct m_proxy {
-		m_proxy(double*, unsigned int);
-		double& operator [](unsigned int)
+		m_proxy(double* rowPointer, unsigned int cols)
+		: dataRow(rowPointer), colsCount(cols) {};
+		double& operator [](unsigned int);
 	private:
 			double* dataRow;
-			unsigned int targetCol;
+			unsigned int colsCount;
 	};
 
 	class RectMatrix {
@@ -27,20 +35,29 @@ namespace classes {
 
 	public:
 		RectMatrix(const RectMatrix&);
-		RectMatrix(const m_size& size = m_size(), ... );
+		RectMatrix(const m_size&, ... );
+		RectMatrix(void);
 		~RectMatrix(void);
+		/*
+		 * Setters/getters:
+		 * Unlike to math matrix: 
+		 * 		Numeration of elements starts at null
+		 * Like to math matrix:
+		 * 		First argument is row number,
+		 * 		Second is column number
+		 */
+		m_proxy operator [](unsigned int);
+		double& operator ()(unsigned int, unsigned int); 
+		void operator =(const RectMatrix&);
+		void operator +=(const RectMatrix&);
+		void operator -=(const RectMatrix&);
+		void operator *=(const RectMatrix&);
+		void operator *=(double);
 		bool isAddValid(const RectMatrix&) const;
 		bool isMultiplyValid(const RectMatrix&) const;
 		double getMax() const;
 		double getMin() const;
-		m_proxy operator [](unsigned int);
-		double& operator ()(unsigned int, unsigned int);
-		std::ostream& operator <<(std::ostream&) const;
-		void operator =(const RectMatrix&);
-		void operator +(const RectMatrix&);
-		void operator -(const RectMatrix&);
-		void operator *(const RectMatrix&);
-		void operator *(double);
+		void print() const;
 	};
 	
 	namespace rectMatrixManip {

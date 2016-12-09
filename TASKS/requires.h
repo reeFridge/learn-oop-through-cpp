@@ -8,5 +8,6 @@
 
 // MY_LIBS
 #include "./TASK_1/sources/vector3d.h"
+#include "./TASK_2/sources/rectMatrix.h"
 
 #endif // REQUIRE_H
