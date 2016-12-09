@@ -44,11 +44,8 @@ int main(int argc, char** argv) {
 		cout << endl;
 	}
 	
-	cout << (int)m1.getMax() << "|" << (int)m.getMax() << endl << endl;
-	
+	cout << (int)m1.getMax() << "|" << (int)m.getMax() << endl << endl;	
 	m.print();
-	
 	m *= m1;
-	
 	m.print();
 }
