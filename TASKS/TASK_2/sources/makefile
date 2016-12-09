@@ -1,6 +1,6 @@
 CPP = g++
 BIN_DIR = ./bin
-SOURCES = rectMatrix.cpp
+SOURCES = main.cpp rectMatrix.cpp
 
 release: bin $(SOURCES)
 	$(CPP) $(SOURCES) -o $(BIN_DIR)/release
