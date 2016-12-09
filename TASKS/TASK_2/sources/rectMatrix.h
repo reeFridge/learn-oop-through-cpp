@@ -55,9 +55,9 @@ namespace classes {
 		void operator *=(double);
 		bool isAddValid(const RectMatrix&) const;
 		bool isMultiplyValid(const RectMatrix&) const;
-		std::ostream& operator <<(std::ostream&) const;
 		double getMax() const;
 		double getMin() const;
+		void print() const;
 	};
 	
 	namespace rectMatrixManip {
