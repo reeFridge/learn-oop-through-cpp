@@ -1,5 +1,6 @@
 #include <cstdarg>
 #include <iostream>
+#include <iomanip>
 #include "rectMatrix.h"
 
 #ifdef DEBUG
@@ -127,55 +128,54 @@ namespace classes {
 	bool RectMatrix::isMultiplyValid(const RectMatrix& that) const {
 		return columns == that.rows;
 	}
-}
-
-int main() {
-	classes::m_size size(2, 3);
-	classes::RectMatrix m(size,
-		2., 3., 4.,
-		9., 8., 5.
-	);
 	
-	classes::m_size size1(3, 1);
-	classes::RectMatrix m1(size1,
-		1.,
-		1.,
-		1.
-	);
-	
-	classes::m_size size2(0, 1);
-	classes::RectMatrix m2(size2);
-	
-	std::cout << m.isAddValid(m1) << std::endl;
-	std::cout << m.isMultiplyValid(m1) << std::endl;
-	for (int i = 0; i < size.rows; i++) {
-		for (int j = 0; j < size.columns; j++) {
-			try {
-				std::cout << (int)(m[i][j]) << " ";
-			} catch (classes::ERROR_CODE err) {
-				switch(err) {
-					case classes::OUT_OF_ROWS:
-						std::cout << " [OOR] ";
-						break;
-					case classes::OUT_OF_COLUMNS:
-						std::cout << " [OOC] ";
-						break;
-					default:
-						std::cout << " [OOF] ";
-				}
-			}
-		}
-		std::cout << std::endl;
+	double RectMatrix::getMax() const {
+		double max = data[0];
+		unsigned int size = columns*rows;
+		for (int i = 0; i < size; i++)
+			if (data[i] > max) max = data[i];
+		return max;
 	}
 	
-	std::cout << std::endl;
+	double RectMatrix::getMin() const {
+		double min = data[0];
+		unsigned int size = columns*rows;
+		for (int i = 0; i < size; i++)
+			if (data[i] < min) min = data[i];
+		return min;
+	}
 	
-	m *= m1;
-	
-	for (int i = 0; i < 2; i++) {
-		for (int j = 0; j < 1; j++) {
-			std::cout << (int)m(i, j) << " ";
-		}
+	void RectMatrix::print() const {
+		std::cout << "Matrix[" << id << "]:" << std::endl;
+		for (int i = 0; i < rows; i++) {
+			for (int j = 0; j < columns; j++) {
+				std::cout << std::setw(6) << std::setprecision(3) << std::right << data[i*columns + j] << std::right << ' ';
+			}
 		std::cout << std::endl;
+		}
+	}
+	
+	RectMatrix rectMatrixManip::operator +(const RectMatrix& left, const RectMatrix& right) {
+		RectMatrix result(left);
+		result += right;
+		return RectMatrix(result);
+	}
+	
+	RectMatrix rectMatrixManip::operator -(const RectMatrix& left, const RectMatrix& right) {
+		RectMatrix result(left);
+		result -= right;
+		return RectMatrix(result);
+	}
+	
+	RectMatrix rectMatrixManip::operator *(const RectMatrix& left, const RectMatrix& right) {
+		RectMatrix result(left);
+		result *= right;
+		return RectMatrix(result);
+	}
+	
+	RectMatrix rectMatrixManip::operator *(const double scalar, const RectMatrix& origin) {
+		RectMatrix result(origin);
+		result *= scalar;
+		return RectMatrix(result);
 	}
 }
